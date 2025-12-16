@@ -1,0 +1,14 @@
+# Ignore log files
+/log/*.log
+
+# Ignore database files
+/db/*.db
+
+# Ignore temporary files
+/tmp
+
+# Ignore node modules
+/node_modules
+
+# Ignore yarn cache
+/yarn-cache
