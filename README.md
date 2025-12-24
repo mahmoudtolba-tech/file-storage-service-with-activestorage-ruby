@@ -1,84 +1,38 @@
-# File Storage Service
-A Ruby on Rails application for storing and serving files.
+# Ruby Project: A File Storage Service With Activestorage
 
-## Features
-* File upload and download
-* File listing and searching
-* File deletion
+Generated on 2025-12-24
 
-## Architecture
-       +---------------+
-       |  Client     |
-       +---------------+
-                  |
-                  |
-                  v
-       +---------------+
-       |  Rails App  |
-       +---------------+
-                  |
-                  |
-                  v
-       +---------------+
-       |  Database    |
-       +---------------+
-                  |
-                  |
-                  v
-       +---------------+
-       |  Storage     |
-       +---------------+
-## Prerequisites
-* Ruby 3.2
-* Rails 7.0
-* PostgreSQL
-* Redis
+## Description
 
-## Setup
-1. Clone the repository
-2. Install dependencies with `bundle install`
-3. Setup the database with `rails db:setup`
-4. Start the application with `rails s`
+This is a practice Ruby project implementing a file storage service with ActiveStorage.
 
-## Environment Variables
-* `DATABASE_HOST`
-* `DATABASE_USER`
-* `DATABASE_PASSWORD`
-* `DATABASE_NAME`
-* `REDIS_HOST`
-* `REDIS_PORT`
-* `RAILS_ENV`
-* `SECRET_KEY_BASE`
+## Purpose
 
-## API Endpoints
-* `GET /files`: List all files
-* `POST /files`: Create a new file
-* `GET /files/:id`: Get a file by ID
-* `PUT /files/:id`: Update a file by ID
-* `DELETE /files/:id`: Delete a file by ID
+This project is designed for learning and demonstration purposes, showcasing
+practical Ruby programming concepts and best practices.
 
-## Docker Setup
-1. Build the Docker image with `docker build -t file-storage-service .`
-2. Run the Docker container with `docker run -p 3000:3000 file-storage-service`
+## Getting Started
 
-## Development Workflow
-1. Create a new branch for the feature or bug fix
-2. Write tests for the feature or bug fix
-3. Implement the feature or bug fix
-4. Run tests with `bundle exec rails test`
-5. Push the changes to the repository
-6. Create a pull request for review
+1. Review the code files in this directory
+2. Install any necessary dependencies
+3. Run the main program file
+4. Experiment and modify to learn
 
-## Testing
-* Run tests with `bundle exec rails test`
-* Use a test database with `RAILS_ENV=test`
+## Learning Objectives
 
-## Troubleshooting
-* Check the logs with `rails logs`
-* Use the Rails console with `rails c`
+- Understand Ruby syntax and conventions
+- Practice problem-solving with Ruby
+- Explore real-world application development
 
 ## Author
+
 **Mahmoud Tolba**
 
+Software developer and educator passionate about creating practice programming resources.
+
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+*Auto-generated practice project*
