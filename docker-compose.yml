@@ -1,27 +1,26 @@
 version: '3'
+
 services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/postgresql/data
 
   app:
     build: .
-    command: rails s -b 0.0.0.0
+    command: bundle exec puma -C config/puma.rb
     environment:
-      DATABASE_HOST: db
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: password
-      RAILS_ENV: development
-    volumes:
-      - .:/app
+      - ENVIRONMENT=development
+      - DB_PASSWORD=${DB_PASSWORD}
     ports:
       - "3000:3000"
     depends_on:
       - db
+    volumes:
+      - .:/app
 
 volumes:
   db-data:
