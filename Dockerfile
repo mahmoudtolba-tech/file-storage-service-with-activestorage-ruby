@@ -1,23 +1,15 @@
-# Stage 1: build the Ruby image
-FROM ruby:3.2-alpine as build
+FROM ruby:3.1-alpine as build
 
 WORKDIR /app
+
+COPY Gemfile* ./
+
+RUN bundle install
 
 COPY . .
 
-RUN gem install bundler
-RUN bundle config build.nokogiri --use-system-libraries
-RUN bundle install
-
-# Stage 2: build the application image
-FROM ruby:3.2-alpine
-
-WORKDIR /app
-
-COPY --from=build /app .
+RUN rails db:prepare
 
 EXPOSE 3000
 
-RUN bundle exec rails db:setup
-
-CMD ["rails", "s", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
