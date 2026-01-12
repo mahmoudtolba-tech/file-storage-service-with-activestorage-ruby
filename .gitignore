@@ -1,8 +1,17 @@
-# Ignore files and directories
-/db-data
-/config/database.yml
-/vendor
-/log
-/node_modules
+# Ignore Rails files
+log/*
+tmp/*
+public/uploads
 
-Note: This project uses a simple `puma` server for development and a `docker-compose` configuration for production. You can modify the `Dockerfile` and `docker-compose.yml` files to fit your specific needs. Additionally, you may want to add more tests and coverage to the project.
+# Ignore node_modules and yarn_cache
+node_modules
+yarn-error.log
+yarn-cache
+
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+
+# Ignore Gemfile and Bundler files
+Gemfile.lock
+.bundle
