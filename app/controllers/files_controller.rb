@@ -1,45 +1,32 @@
-# frozen_string_literal: true
 class FilesController < ApplicationController
-  before_action :set_file, only: %i[show update destroy]
-
   def index
-    @files = FileService.new.list_files
-    render json: @files
+    files = FileService.new.all
+    render json: files
   end
 
   def show
-    render json: @file
+    file = FileService.new.find(params[:id])
+    render json: file
   end
 
   def create
-    @file = FileService.new.create_file(file_params)
-    if @file.valid?
-      render json: @file, status: :created
-    else
-      render json: @file.errors, status: :unprocessable_entity
-    end
+    file = FileService.new.create(file_params)
+    render json: file
   end
 
   def update
-    if @file.update(file_params)
-      render json: @file
-    else
-      render json: @file.errors, status: :unprocessable_entity
-    end
+    file = FileService.new.update(params[:id], file_params)
+    render json: file
   end
 
   def destroy
-    @file.destroy
+    FileService.new.delete(params[:id])
     head :no_content
   end
 
   private
 
-  def set_file
-    @file = FileService.new.get_file(params[:id])
-  end
-
   def file_params
-    params.require(:file).permit(:name, :file_data)
+    params.require(:file).permit(:file)
   end
 end
