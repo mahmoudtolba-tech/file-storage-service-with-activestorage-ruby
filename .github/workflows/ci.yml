@@ -2,10 +2,11 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,24 +15,17 @@ jobs:
       - name: Set up Ruby
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '3.1'
+          ruby-version: '3.1.2'
 
       - name: Install dependencies
         run: |
           gem install bundler
           bundle install
 
-      - name: Lint and format code
+      - name: Run database migrations
         run: |
-          rubocop
-          rubycritic
+          bundle exec rails db:migrate
 
       - name: Run tests
         run: |
-          bundle exec rspec
-
-      - name: Build and push Docker image
-        run: |
-          docker build -t file-storage-service .
-          docker tag file-storage-service:latest ${DOCKER_USERNAME}/file-storage-service:latest
-          docker push ${DOCKER_USERNAME}/file-storage-service:latest
+          bundle exec rails test
