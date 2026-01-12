@@ -1,23 +1,22 @@
-# File service
 class FileService
-  def initialize(repository:)
+  def initialize(repository = FileRepository.new)
     @repository = repository
+  end
+
+  def all
+    @repository.all
   end
 
   def find(id)
     @repository.find(id)
   end
 
-  def list
-    @repository.list
+  def create(params)
+    @repository.create(params)
   end
 
-  def create(file_params)
-    @repository.create(file_params)
-  end
-
-  def update(id, file_params)
-    @repository.update(id, file_params)
+  def update(id, params)
+    @repository.update(id, params)
   end
 
   def delete(id)
