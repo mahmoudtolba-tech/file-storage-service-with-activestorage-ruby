@@ -1,24 +1,25 @@
 {
   "language": "Ruby",
   "project_idea": "a file storage service with ActiveStorage",
-  "generated_at": "2026-01-09 02:30:52",
+  "generated_at": "2026-01-13 01:58:28",
   "files": [
-    "app.rb",
-    "app/models/file.rb",
-    "app/models/file_repository.rb",
-    "app/services/file_service.rb",
-    "app/api.rb",
-    "db/migrate/20230116143210_create_files.rb",
-    "config/database.yml",
     "config/application.rb",
+    "config/database.yml",
+    "app/models/file.rb",
+    "app/repositories/file_repository.rb",
+    "app/services/file_service.rb",
+    "app/controllers/files_controller.rb",
+    "config/routes.rb",
+    "app/views/files/index.json.jbuilder",
     "Dockerfile",
     "docker-compose.yml",
     ".github/workflows/ci.yml",
     ".env.example",
-    "config/initializers/log_formatter.rb",
-    "LICENSE",
+    "Gemfile",
     "README.md",
-    ".gitignore"
+    "LICENSE",
+    ".gitignore",
+    ".dockerignore"
   ],
   "purpose": "Demo demonstration and learning resource"
 }
