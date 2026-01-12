@@ -1,22 +1,23 @@
-# frozen_string_literal: true
 class FileRepository
-  def self.all
-    File.all
+  def all
+    FileModel.all
   end
 
-  def self.find(id)
-    File.find(id)
+  def find(id)
+    FileModel.find(id)
   end
 
-  def self.create(file)
-    File.create(file)
+  def create(params)
+    FileModel.create(params)
   end
 
-  def self.update(id, file)
-    File.find(id).update(file)
+  def update(id, params)
+    file = find(id)
+    file.update(params)
   end
 
-  def self.destroy(id)
-    File.find(id).destroy
+  def delete(id)
+    file = find(id)
+    file.destroy
   end
 end
