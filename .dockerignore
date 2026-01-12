@@ -1,14 +1,12 @@
-# Ignore log files
-/log/*.log
+# Ignore Gemfile and Bundler files
+Gemfile.lock
+.bundle
 
-# Ignore database files
-/db/*.db
+# Ignore Rails files
+log/*
+tmp/*
+public/uploads
 
-# Ignore temporary files
-/tmp
-
-# Ignore node modules
-/node_modules
-
-# Ignore yarn cache
-/yarn-cache
+# Ignore operating system files
+.DS_Store
+Thumbs.db
