@@ -1,25 +1,21 @@
 class FileService
-  def initialize(repository = FileRepository.new)
-    @repository = repository
+  def initialize(file)
+    @file = file
   end
 
-  def all
-    @repository.all
+  def upload
+    if @file.upload.attached?
+      { success: true, message: 'File uploaded successfully' }
+    else
+      { success: false, message: 'Error uploading file' }
+    end
   end
 
-  def find(id)
-    @repository.find(id)
-  end
-
-  def create(params)
-    @repository.create(params)
-  end
-
-  def update(id, params)
-    @repository.update(id, params)
-  end
-
-  def delete(id)
-    @repository.delete(id)
+  def destroy
+    if @file.destroy
+      { success: true, message: 'File deleted successfully' }
+    else
+      { success: false, message: 'Error deleting file' }
+    end
   end
 end
