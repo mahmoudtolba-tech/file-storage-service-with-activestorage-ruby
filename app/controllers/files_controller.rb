@@ -1,32 +1,32 @@
 class FilesController < ApplicationController
+  before_action :set_file, only: %i[show destroy]
+
   def index
-    files = FileService.new.all
+    files = FileRepository.all
     render json: files
   end
 
-  def show
-    file = FileService.new.find(params[:id])
-    render json: file
-  end
-
   def create
-    file = FileService.new.create(file_params)
-    render json: file
+    file_service = FileService.new(FileRepository.create(file_params))
+    render json: file_service.upload
   end
 
-  def update
-    file = FileService.new.update(params[:id], file_params)
-    render json: file
+  def show
+    render json: @file
   end
 
   def destroy
-    FileService.new.delete(params[:id])
-    head :no_content
+    file_service = FileService.new(@file)
+    render json: file_service.destroy
   end
 
   private
 
+  def set_file
+    @file = FileRepository.find(params[:id])
+  end
+
   def file_params
-    params.require(:file).permit(:file)
+    params.permit(:upload)
   end
 end
