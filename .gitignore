@@ -1,17 +1,6 @@
-# Ignore Rails files
-log/*
-tmp/*
-public/uploads
-
-# Ignore node_modules and yarn_cache
-node_modules
-yarn-error.log
-yarn-cache
-
-# Ignore operating system files
-.DS_Store
-Thumbs.db
-
-# Ignore Gemfile and Bundler files
-Gemfile.lock
-.bundle
+/log
+/db/*.sqlite3
+/db/*.env
+/public/uploads
+/vendor
+/.byebug_history
