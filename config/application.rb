@@ -1,25 +1,21 @@
-require_relative 'boot'
-require 'rails/all'
+require_relative "boot"
+
+require "rails/all"
 
 Bundler.require(*Rails.groups)
 
 module FileStorageService
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
-    # Configuration for the application, defaults to the values below.
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed last.
-    #
-    config.time_zone = "UTC"
+    # Use Sidekiq for Active Job
+    config.active_job.queue_adapter = :sidekiq
+
+    # Enable Active Storage with local and S3 service (configured via env)
     config.active_storage.service = :local
 
-    config.middleware.use Rack::Cors do
-      allow do
-        origins '*'
-        resource '*', headers: :any, methods: [:get, :post, :put, :delete, :options]
-      end
-    end
+    # Autoload paths for service and repository layers
+    config.eager_load_paths << Rails.root.join("app/services")
+    config.eager_load_paths << Rails.root.join("app/repositories")
   end
 end
