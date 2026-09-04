@@ -1,2 +1,1 @@
-Rails.application.config.active_storage.service = :amazon
-Note that you'll need to create an AWS account and set up an S3 bucket to use the `:amazon` service. You can also use other services like `:google` or `:azure` if you prefer. You'll need to install the corresponding gems and configure them in your `active_storage.yml` file.
+Rails.application.config.active_storage.variant_processor = :mini_magick
