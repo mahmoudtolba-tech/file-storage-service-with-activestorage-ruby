@@ -1,26 +1,27 @@
-FROM ruby:3.1.2-alpine as build
-
+# ---- Builder Stage ----
+FROM ruby:3.2.2-alpine AS builder
 WORKDIR /app
 
-COPY . .
+RUN apk add --no-cache build-base postgresql-dev nodejs npm tzdata
 
-RUN gem install bundler
+COPY Gemfile Gemfile.lock ./
+RUN bundle config set --local without 'development test' && \
+    bundle install --jobs 4 --retry 3
 
-RUN bundle config set path 'vendor/bundle'
-RUN bundle install
-
-RUN rails db:setup
-RUN rails db:migrate
-
-FROM ruby:3.1.2-alpine
-
+# ---- Runtime Stage ----
+FROM ruby:3.2.2-alpine
 WORKDIR /app
 
-COPY --from=build /app .
+ENV RAILS_ENV=production \
+    RAILS_LOG_TO_STDOUT=1 \
+    BUNDLE_PATH=/bundle
 
-ENV RAILS_ENV production
-ENV RAILS_LOG_TO_STDOUT true
+RUN apk add --no-cache postgresql-client tzdata \
+    && addgroup -S app && adduser -S -G app app
+
+COPY --from=builder /bundle /bundle
+COPY --from=builder /app /app
 
 EXPOSE 3000
-
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
