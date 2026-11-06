@@ -1,11 +1,17 @@
-# Seed sample documents
-5.times do
-  doc = Document.create!(
-    title: Faker::Lorem.sentence(word_count: 3),
-    metadata: { author: Faker::Name.name, description: Faker::Lorem.paragraph }
+# frozen_string_literal: true
+
+# Seed a sample file record (requires a file present in db/seeds/files)
+sample_path = Rails.root.join("db", "seeds", "files", "sample.pdf")
+if File.exist?(sample_path)
+  FileRecord.create!(
+    title: "Sample PDF",
+    filename: "sample.pdf"
+  ).uploaded_file.attach(
+    io: File.open(sample_path),
+    filename: "sample.pdf",
+    content_type: "application/pdf"
   )
-  file_path = Rails.root.join('app', 'assets', 'images', 'sample.png')
-  if File.exist?(file_path)
-    doc.file.attach(io: File.open(file_path), filename: "sample_#{doc.id}.png", content_type: 'image/png')
-  end
+  puts "Seeded sample file record."
+else
+  puts "No sample file found; skipping seed."
 end
