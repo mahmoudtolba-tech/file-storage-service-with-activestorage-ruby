@@ -1,7 +1,11 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails/all"
 
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module FileStorageService
@@ -11,11 +15,11 @@ module FileStorageService
     # Use Sidekiq for Active Job
     config.active_job.queue_adapter = :sidekiq
 
-    # Enable Active Storage with local and S3 service (configured via env)
-    config.active_storage.service = :local
+    # Configure Active Storage to use Amazon S3 in production
+    config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
-    # Autoload paths for service and repository layers
-    config.eager_load_paths << Rails.root.join("app/services")
-    config.eager_load_paths << Rails.root.join("app/repositories")
+    # Autoload paths for repository and service layers
+    config.autoload_paths << Rails.root.join("app", "repositories")
+    config.autoload_paths << Rails.root.join("app", "services")
   end
 end
