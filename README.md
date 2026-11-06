@@ -1,25 +1,22 @@
 # File Storage Service
 
-A production‑ready Rails API for storing and serving files using ActiveStorage.  
-Built with clean architecture principles: separate service and repository layers, dependency injection, and robust error handling.
+A production‑ready Rails API for uploading, retrieving, and deleting files using **ActiveStorage**.  
+Built with modern Ruby on Rails practices: repository pattern, service layer, dependency injection, and clean architecture.
 
-## Stack
-
-- Ruby 3.2
-- Rails 7.1
-- PostgreSQL
-- Redis (Sidekiq)
-- RSpec
-- Docker & Docker‑Compose
-- GitHub Actions CI
+## Tech Stack
+- **Ruby 3.2**
+- **Rails 7.1**
+- **PostgreSQL**
+- **Redis**
+- **ActiveStorage** (local storage by default, S3 ready)
+- **RSpec** for testing
+- **Docker** (multi‑stage builds)
+- **GitHub Actions** CI
 
 ## Getting Started
 
 ### Prerequisites
-
 - Docker & Docker‑Compose
-- Ruby (for local development without Docker)
+- Ruby 3.2 (if you want to run locally without Docker)
 
 ### Setup (Docker)
-
-1. Copy the example env file and fill in values:
