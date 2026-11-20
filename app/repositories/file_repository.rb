@@ -1,22 +1,37 @@
+# frozen_string_literal: true
+
+# Repository pattern for FileRecord.
+# Provides a thin abstraction over ActiveRecord queries, making the
+# service layer easier to test and maintain.
+
 class FileRepository
-  def self.all
-    File.all
+  # Returns an ActiveRecord::Relation of all files, ordered newest first.
+  def all
+    FileRecord.recent
   end
 
-  def self.find(id)
-    File.find(id)
+  # Finds a single FileRecord by ID. Raises ActiveRecord::RecordNotFound if not found.
+  def find(id)
+    FileRecord.find(id)
   end
 
-  def self.create(file)
-    File.create(file)
+  # Persists a new FileRecord with the attached ActiveStorage blob.
+  # +attributes+ must contain :filename, :content_type, :byte_size, and :file (uploaded file).
+  def create(attributes)
+    file = attributes.delete(:file)
+    record = FileRecord.new(attributes)
+
+    raise ArgumentError, "File attachment missing" unless file.present?
+
+    record.file.attach(file)
+    record.save!
+    record
   end
 
-  def self.update(id, file)
-    file_obj = File.find(id)
-    file_obj.update(file)
-  end
-
-  def self.destroy(id)
-    File.find(id).destroy
+  # Deletes a FileRecord and its attached blob.
+  def delete(id)
+    record = find(id)
+    record.file.purge
+    record.destroy!
   end
 end
