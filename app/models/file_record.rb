@@ -1,13 +1,25 @@
 # frozen_string_literal: true
 
 class FileRecord < ApplicationRecord
-  # Active Storage attachment
-  has_one_attached :uploaded_file
+  # This model represents metadata for uploaded files.
+  # The actual binary data is stored via ActiveStorage.
 
-  # Validations
-  validates :title, presence: true, length: { maximum: 255 }
-  validates :uploaded_file, attached: true, content_type: %w[image/png image/jpg image/jpeg application/pdf]
+  has_one_attached :file
 
-  # Scope to order by most recent
+  validates :filename, presence: true
+  validates :content_type, presence: true
+  validates :byte_size, numericality: { only_integer: true, greater_than: 0 }
+
+  # Scope for ordering newest first
   scope :recent, -> { order(created_at: :desc) }
+
+  # Returns a signed URL for direct download (valid for 5 minutes)
+  def signed_url
+    Rails.application.routes.url_helpers.rails_blob_url(
+      file,
+      disposition: "attachment",
+      only_path: false,
+      expires_in: 5.minutes
+    )
+  end
 end
