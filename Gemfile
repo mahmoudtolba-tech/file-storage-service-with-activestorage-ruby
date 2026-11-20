@@ -6,32 +6,31 @@ ruby "3.2.2"
 gem "rails", "~> 7.1.0"
 
 # Database
-gem "pg", "~> 1.5"
+gem "pg", ">= 1.5", "< 2.0"
 
-# Redis client
+# Redis for caching / sidekiq (future)
 gem "redis", "~> 4.8"
 
-# File storage
-gem "image_processing", "~> 1.14"
-gem "mini_magick", "~> 4.11"
+# File uploads
+gem "image_processing", "~> 1.2"
+gem "aws-sdk-s3", "~> 1.121" # If using S3 in production (optional)
 
-# Background jobs (optional for future)
+# Background jobs (optional)
 gem "sidekiq", "~> 6.5"
-
-# Environment variables
-gem "dotenv-rails", groups: [:development, :test]
 
 # Testing
 group :development, :test do
-  gem "rspec-rails", "~> 6.0"
-  gem "factory_bot_rails", "~> 6.4"
+  gem "rspec-rails", "~> 6.1"
+  gem "factory_bot_rails", "~> 6.3"
   gem "faker", "~> 3.2"
+  gem "pry-rails", "~> 0.3.9"
+end
+
+# Linting / code quality
+group :development do
   gem "rubocop", require: false
   gem "rubocop-rails", require: false
 end
 
-# Use Puma as the app server
-gem "puma", "~> 6.0"
-
-# Use Active Storage variants
-gem "aws-sdk-s3", "~> 1.129", require: false
+# Environment variable handling
+gem "dotenv-rails", groups: [:development, :test]
