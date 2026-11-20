@@ -1,72 +1,51 @@
-# frozen_string_literal: true
 # -------------------------------------------------
-# Multi‑stage Dockerfile for the FileStorageService
+#  Build Stage
 # -------------------------------------------------
-
-# ---------- Builder Stage ----------
 FROM ruby:3.2.2-alpine AS builder
 
-# Install system dependencies
+# Install dependencies
 RUN apk add --no-cache \
     build-base \
     postgresql-dev \
     nodejs \
     yarn \
     tzdata \
-    libxml2-dev \
-    libxslt-dev \
-    imagemagick \
-    shared-mime-info
+    git
 
-# Set working directory
+# Set workdir
 WORKDIR /app
 
 # Install bundler
-RUN gem install bundler -v 2.4.22
+ENV BUNDLE_PATH=/bundle
+ENV BUNDLE_WITHOUT="development test"
 
-# Copy Gemfile and lockfile
+# Copy Gemfile and lock
 COPY Gemfile Gemfile.lock ./
-
-# Install gems (without development group)
-RUN bundle config set --local without 'development test' && \
+RUN bundle config set --local deployment 'true' && \
     bundle install --jobs 4 --retry 3
 
-# ---------- Runtime Stage ----------
+# -------------------------------------------------
+#  Runtime Stage
+# -------------------------------------------------
 FROM ruby:3.2.2-alpine
 
 # Install runtime dependencies
 RUN apk add --no-cache \
     postgresql-client \
-    libxml2 \
-    libxslt \
-    imagemagick \
-    tzdata \
-    shared-mime-info
+    libpq \
+    nodejs \
+    tzdata
 
-# Set environment variables
-ENV RAILS_ENV=production \
-    RACK_ENV=production \
-    BUNDLE_WITHOUT=development:test
-
-# Create unprivileged user
-RUN addgroup -S app && adduser -S app -G app
-USER app
-
-# Set working directory
 WORKDIR /app
 
-# Copy only the necessary files from builder
-COPY --from=builder /usr/local/bundle /usr/local/bundle
-COPY --from=builder /app .
-
-# Copy the rest of the application code
+# Copy bundle from builder
+COPY --from=builder /bundle /usr/local/bundle
 COPY . .
 
 # Precompile assets (if any)
-RUN bundle exec rails assets:precompile
+RUN bundle exec rails assets:precompile RAILS_ENV=production
 
-# Expose port
 EXPOSE 3000
 
-# Start the server
-CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
+# Entrypoint
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
