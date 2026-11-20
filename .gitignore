@@ -1,36 +1,46 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# Ruby / Rails
 /.bundle
-/log/*
+/log/*.log
 /tmp
 /tmp/*
+!/tmp/.keep
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/public/assets
+/public/packs
 /node_modules
-/.rbenv-vars
-/.byebug_history
-/.yardoc
-/.yardoc/*
+/yarn-error.log
 /coverage
-/coverage/*
-/spec/tmp
-/.sass-cache
-/.eslintcache
-/.yardoc
-/.bundle
 /.byebug_history
-/.ruby-version
-/.ruby-gemset
+/.rspec_status
+/.secret
 /.env
-/.env.local
-/.env.development
-/.env.test
-/.env.production
-/coveralls.yml
+/.env.*.local
+
+# IDEs and editors
 /.idea
 /.vscode
-*.swp
-*.swo
+*.sublime-project
+*.sublime-workspace
+
+# System files
 .DS_Store
-/public/packs
-/public/packs-test
-/public/assets
-/public/assets/**/*
-/storage/*
-!storage/.keep
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Bundler
+/.bundle
+
+# Credentials
+/config/master.key
+
+# Log files
+log/*.log
+
+# Temporary files
+tmp/**/*
