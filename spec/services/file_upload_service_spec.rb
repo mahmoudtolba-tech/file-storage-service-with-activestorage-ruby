@@ -3,29 +3,64 @@
 require "rails_helper"
 
 RSpec.describe FileUploadService, type: :service do
-  let(:title) { "Test Document" }
-  let(:filename) { "test.pdf" }
-  let(:file_path) { Rails.root.join("spec", "fixtures", "files", filename) }
-  let(:file_io) { File.open(file_path) }
+  let(:repository) { instance_double(FileRepository) }
+  let(:service) { described_class.new(repository: repository) }
 
-  after { file_io.close }
+  let(:valid_file) do
+    fixture_file_upload(Rails.root.join("spec", "fixtures", "files", "sample.png"), "image/png")
+  end
 
   describe "#call" do
-    it "creates a FileRecord with attached file" do
-      service = described_class.new
-      record = service.call(title: title, filename: filename, file_io: file_io)
+    context "with a valid file" do
+      it "creates a record and returns metadata" do
+        allow(repository).to receive(:create).and_return(
+          double(
+            id: 1,
+            filename: "sample.png",
+            content_type: "image/png",
+            byte_size: valid_file.size,
+            signed_url: "http://example.com/file/1"
+          )
+        )
 
-      expect(record).to be_persisted
-      expect(record.title).to eq(title)
-      expect(record.uploaded_file).to be_attached
+        result = service.call(valid_file)
+
+        expect(result).to include(
+          id: 1,
+          filename: "sample.png",
+          content_type: "image/png",
+          byte_size: valid_file.size,
+          url: "http://example.com/file/1"
+        )
+        expect(repository).to have_received(:create).once
+      end
     end
 
-    context "when title is missing" do
-      it "raises UploadError" do
-        service = described_class.new
-        expect {
-          service.call(title: "", filename: filename, file_io: file_io)
-        }.to raise_error(FileUploadService::UploadError, /Title cannot be blank/)
+    context "when file is too large" do
+      it "raises an ArgumentError" do
+        large_file = double(
+          original_filename: "big.pdf",
+          content_type: "application/pdf",
+          size: FileUploadService::MAX_FILE_SIZE + 1
+        )
+        expect { service.call(large_file) }.to raise_error(ArgumentError, /exceeds maximum size/)
+      end
+    end
+
+    context "when content type is unsupported" do
+      it "raises an ArgumentError" do
+        bad_type_file = double(
+          original_filename: "script.sh",
+          content_type: "application/x-sh",
+          size: 1024
+        )
+        expect { service.call(bad_type_file) }.to raise_error(ArgumentError, /Unsupported content type/)
+      end
+    end
+
+    context "when file param is missing" do
+      it "raises an ArgumentError" do
+        expect { service.call(nil) }.to raise_error(ArgumentError, /Invalid file object/)
       end
     end
   end
