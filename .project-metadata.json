@@ -1,7 +1,7 @@
 {
   "language": "Ruby",
   "project_idea": "a file storage service with ActiveStorage",
-  "generated_at": "2026-11-06T14:47:41.118126Z",
+  "generated_at": "2026-11-20T11:43:40.043181Z",
   "generated_by": "tolbaTech GitHub Strike Service",
   "model": "gpt-oss-120b",
   "files": [
@@ -13,17 +13,20 @@
     "LICENSE",
     "README.md",
     "Rakefile",
-    "app/controllers/api/v1/file_records_controller.rb",
+    "app/controllers/api/v1/files_controller.rb",
     "app/models/file_record.rb",
-    "app/repositories/file_record_repository.rb",
+    "app/repositories/file_repository.rb",
     "app/services/file_upload_service.rb",
     "config/application.rb",
     "config/database.yml",
-    "config/initializers/redis.rb",
     "config/routes.rb",
-    "db/migrate/20231101000000_create_file_records.rb",
+    "config/storage.yml",
+    "db/migrate/202311200001_create_file_records.rb",
+    "db/migrate/202311200002_create_active_storage_tables.rb",
     "db/seeds.rb",
     "docker-compose.yml",
+    "spec/controllers/api/v1/files_controller_spec.rb",
+    "spec/rails_helper.rb",
     "spec/services/file_upload_service_spec.rb",
     "spec/spec_helper.rb"
   ]
